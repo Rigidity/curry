@@ -1,0 +1,14 @@
+[package]
+name = "curry"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+clap = { version = "4.5.8", features = ["derive"] }
+clvm-traits = "0.9.0"
+clvm-utils = "0.9.0"
+clvm_tools_rs = "0.1.43"
+clvmr = "0.7.0"
+clvmr_old = { package = "clvmr", version = "0.3.3" }
+hex = "0.4.3"
