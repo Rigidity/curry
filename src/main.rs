@@ -1,3 +1,5 @@
+use std::fs;
+
 use clap::Parser;
 use clvm_tools_rs::classic::clvm_tools::binutils;
 use clvm_traits::{clvm_list, clvm_quote, FromClvm, ToClvm};
@@ -23,10 +25,21 @@ fn main() -> anyhow::Result<()> {
 
     let mut allocator = Allocator::new();
 
-    let program = if args.hex {
-        from_hex(&mut allocator, &args.program)?
+    let source = fs::read_to_string(args.program.clone()).ok();
+
+    let source = if let Some(source) = source {
+        source
     } else {
-        from_text(&mut allocator, &args.program)?
+        if !args.program.contains(' ') && args.program.contains('.') {
+            eprintln!("Interpreting the input as a string rather than a file, since the file doesn't exist.");
+        }
+        args.program
+    };
+
+    let program = if args.hex {
+        from_hex(&mut allocator, &source)?
+    } else {
+        from_text(&mut allocator, &source)?
     };
 
     let curried_args = if args.hex {
